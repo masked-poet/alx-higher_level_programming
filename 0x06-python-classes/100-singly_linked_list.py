@@ -112,4 +112,3 @@ class SinglyLinkedList:
                 string += "\n"
             tmp = tmp.next_node
         return string
-
