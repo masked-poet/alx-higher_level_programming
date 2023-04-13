@@ -1,38 +1,42 @@
 #!/usr/bin/python3
-import sys
+'''task 14 module'''
+
+from sys import stdin
+
+status_codes = {
+        '200': 0,
+        '301': 0,
+        '400': 0,
+        '401': 0,
+        '403': 0,
+        '404': 0,
+        '405': 0,
+        '500': 0
+        }
+
+total_size = i = 0
 
 
-def print_status():
-    '''
-        Printing the status of the request
-    '''
-    counter = 0
-    size = 0
-    file_size = 0
-    status_codes = {"200": 0, "301": 0, "400": 0, "401": 0,
-                    "403": 0, "404": 0, "405": 0, "500": 0}
-
-    for l in sys.stdin:
-        line = l.split()
-        try:
-            size += int(line[-1])
-            code = line[-2]
-            status_codes[code] += 1
-        except:
-            continue
-        if counter == 9:
-            print("File size: {}".format(size))
-            for key, val in sorted(status_codes.items()):
-                if (val != 0):
-                    print("{}: {}".format(key, val))
-            counter = 0
-        counter += 1
-    if counter < 9:
-        print("File size: {}".format(size))
-        for key, val in sorted(status_codes.items()):
-            if (val != 0):
-                print("{}: {}".format(key, val))
+def printer():
+    '''this function prints the statistics'''
+    print(f'File size: {total_size}')
+    for key, value in sorted(status_codes.items()):
+        if value > 0:
+            print('{:s}: {:d}'.format(key, value))
 
 
-if __name__ == "__main__":
-    print_status()
+try:
+    for line in stdin:
+        splitted_line = line.split()
+        if len(splitted_line) >= 2:
+            status = splitted_line[-2]
+            total_size += int(splitted_line[-1])
+            if status in status_codes:
+                status_codes[status] += 1
+        i += 1
+
+        if i % 10 == 0:
+            printer()
+    printer()
+except KeyboardInterrupt as e:
+    printer()
